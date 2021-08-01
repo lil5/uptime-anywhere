@@ -1,0 +1,17 @@
+{
+	"name": "uptime-anywhere",
+	"author": {
+		"name": "Lucian I. Last",
+		"email": "li@last.nl"
+	},
+	"contributors": [],
+	"license": "MIT",
+	"scripts": {
+		"monitor:dev": "chokidar \"**/*.go\" -c \"cd monitor; go run main.go\"",
+		"monitor:build": "cd monitor; go build -o run"
+	},
+	"devDependencies": {
+		"chokidar-cli": "^3.0.0"
+	},
+	"dependencies": {}
+}
