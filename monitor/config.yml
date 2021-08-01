@@ -1,0 +1,6 @@
+owner: myusername
+repo: myreponame
+
+sites:
+  - name: Google
+    url: https://www.google.com
