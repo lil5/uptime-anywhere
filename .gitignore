@@ -1,2 +1,5 @@
 node_modules
 .vscode
+website/dist
+repo/data/*.csv
+monitor/data/*.csv

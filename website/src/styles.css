@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+	.section {
+		@apply mb-8;
+	}
+
+	.section__title {
+		@apply mb-3 flex justify-between items-baseline;
+	}
+
+	.section__title h2 {
+		@apply text-2xl;
+	}
+
+	.section__title span {
+		@apply align-text-bottom;
+	}
+
+	.card {
+		@apply mb-3 border border-l-4 p-4 rounded-sm relative;
+	}
+	.card--loading {
+		@apply animate-pulse border-gray-400 bg-gray-100 text-gray-400;
+	}
+	.card--up {
+		@apply border-green-500 bg-white;
+	}
+	.card--down {
+		@apply border-red-600 bg-red-100;
+	}
+	.card--grid {
+		min-height: calc(107px + 0.125rem);
+		padding-right: calc(160px + 0.125rem);
+	}
+
+	.card h4 {
+		@apply font-bold mb-2;
+	}
+	.card img {
+		width: 17px;
+		height: 17px;
+
+		@apply inline align-middle;
+	}
+
+	.card canvas {
+		@apply absolute bottom-0 right-0;
+	}
+}

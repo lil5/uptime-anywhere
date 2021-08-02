@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>SheetsPro</title>
+
+		<script>
+			globalThis.host = "github"; // "github", "gitlab", "example.org"
+			globalThis.owner = "username";
+			globalThis.repo = "uptime";
+		</script>
+
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+		/>
+		<link rel="stylesheet" href="/src/styles.css" />
+	</head>
+	<body class="bg-primary-100 flex flex-col min-h-screen">
+		<header class="w-full bg-white border-b border-primary-200">
+			<div
+				class="container mx-auto px-2 flex items-center justify-between h-16"
+			>
+				<p class="font-bold">Uptime</p>
+
+				<a
+					class="
+						font-light
+						p-2
+						rounded
+						mx-2
+						hover:bg-primary-200
+						hover:bg-opacity-25
+						hover:shadow-inner
+						hover:text-blue-900
+					"
+					href="https://github.com/lil5/uppptime"
+					>GitHub</a
+				>
+			</div>
+		</header>
+
+		<main class="py-6 px-2 container mx-auto flex-grow">
+			<h1 class="text-3xl mb-8">
+				<strong>Uptime Anywhere</strong> is an open-source uptime monitor and
+				status page
+			</h1>
+			<section class="section">
+				<div class="section__title">
+					<h2>Live Status</h2>
+					<span>7d</span>
+				</div>
+				<ul id="live-status">
+					<li class="card card--loading">
+						<h4>Loading...</h4>
+						<p>&nbsp;</p>
+					</li>
+				</ul>
+			</section>
+		</main>
+		<footer class="text-primary-300">
+			<ul
+				class="
+					p-4
+					grid grid-flow-row
+					sm:grid-flow-col
+					justify-center
+					sm:justify-start
+					gap-4
+					text-center
+					sm:text-left
+					opacity-80
+					hover:opacity-100
+				"
+			>
+				<li>
+					Made with ❤️ on
+					<a
+						class="hover:underline"
+						href="https://github.com/lil5/uptime-anyware"
+						>GitHub</a
+					>
+				</li>
+				<li>
+					Inspired by
+					<a class="hover:underline" href="https://upptime.js.org/">Upptime</a>
+				</li>
+			</ul>
+		</footer>
+
+		<script type="module" src="/src/main.ts"></script>
+	</body>
+</html>
