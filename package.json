@@ -7,11 +7,23 @@
 	"contributors": [],
 	"license": "MIT",
 	"scripts": {
-		"monitor:dev": "chokidar \"**/*.go\" -c \"cd monitor; go run main.go\"",
-		"monitor:build": "cd monitor; go build -o run"
+		"website:dev": "vite",
+		"website:build": "vite build",
+		"monitor:dev": "chokidar \"**/*.go\" \"monitor/config.yml\" -c \"cd monitor; go run main.go\"",
+		"monitor:build": "cd monitor; go build -o run",
+		"repo:cp": "cp monitor/run template-repo && cp -r public template-repo/",
+		"repo:build": "npm run website:build && npm run monitor:build && npm run repo:cp"
 	},
 	"devDependencies": {
-		"chokidar-cli": "^3.0.0"
+		"autoprefixer": "^10.3.1",
+		"chokidar-cli": "^3.0.0",
+		"postcss": "^8.3.6",
+		"vite": "^2.4.4"
 	},
-	"dependencies": {}
+	"dependencies": {
+		"chart.js": "^3.5.0",
+		"comma-separated-values": "^3.6.4",
+		"lit-html": "^1.4.1",
+		"tailwindcss": "^2.2.7"
+	}
 }
