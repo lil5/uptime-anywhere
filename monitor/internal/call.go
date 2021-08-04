@@ -59,11 +59,11 @@ func call(h *http.Client, site ConfigSite) *ResultSite {
 	}
 
 	result := ResultSite{
-		Name:        site.Name,
-		Status:      status,
-		RequestTime: int(elapsed.Milliseconds()),
-		HttpCode:    httpCode,
-		Timestamp:   getTimestampNow(),
+		Name:         site.Name,
+		Status:       status,
+		ResponseTime: int(elapsed.Milliseconds()),
+		HttpCode:     httpCode,
+		Timestamp:    getTimestampNow(),
 	}
 
 	return &result

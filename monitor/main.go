@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"os"
+
 	"li.last.nl/uppptime/internal"
 )
 
@@ -9,8 +12,24 @@ func main() {
 
 	result := internal.CallAll(config.Sites)
 
-	err := internal.WriteAll(result)
+	hasWritten, err := internal.WriteAll(result)
 	if err != nil {
-		panic(err)
+		fmt.Print(err)
+		os.Exit(1)
 	}
+	if !hasWritten {
+		os.Exit(0)
+	} else {
+		err = internal.WriteConfigJSON(config)
+		if err != nil {
+			fmt.Print(err)
+			os.Exit(1)
+		}
+	}
+
+	// err = internal.RunGit(result)
+	// if err != nil {
+	// 	fmt.Print(err)
+	// 	os.Exit(1)
+	// }
 }

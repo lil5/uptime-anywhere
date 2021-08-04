@@ -1,5 +1,7 @@
+host: "http://localhost:3000/public/{{site}}.csv"
 owner: myusername
 repo: myreponame
+branch: main
 
 sites:
   - name: Google
