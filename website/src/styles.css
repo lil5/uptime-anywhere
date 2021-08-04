@@ -7,6 +7,10 @@
 		@apply mb-8;
 	}
 
+	.section--loading .section__title h2 {
+		@apply w-32 bg-gray-400 rounded-sm animate-pulse;
+	}
+
 	.section__title {
 		@apply mb-3 flex justify-between items-baseline;
 	}
@@ -23,12 +27,15 @@
 		@apply mb-3 border border-l-4 p-4 rounded-sm relative;
 	}
 	.card--loading {
-		@apply animate-pulse border-gray-400 bg-gray-100 text-gray-400;
+		@apply animate-pulse border-gray-400 bg-gray-100;
 	}
-	.card--up {
+	.card--loading h4 {
+		@apply w-28 bg-gray-400;
+	}
+	.card--default {
 		@apply border-green-500 bg-white;
 	}
-	.card--down {
+	.card--danger {
 		@apply border-red-600 bg-red-100;
 	}
 	.card--grid {
@@ -46,7 +53,10 @@
 		@apply inline align-middle;
 	}
 
-	.card canvas {
-		@apply absolute bottom-0 right-0;
+	.card__canvas {
+		width: 160px;
+		height: 107px;
+
+		@apply absolute bottom-0 right-0 overflow-hidden;
 	}
 }

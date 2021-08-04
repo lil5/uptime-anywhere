@@ -15,15 +15,18 @@
 		"repo:build": "npm run website:build && npm run monitor:build && npm run repo:cp"
 	},
 	"devDependencies": {
+		"@types/papaparse": "^5.2.6",
 		"autoprefixer": "^10.3.1",
 		"chokidar-cli": "^3.0.0",
 		"postcss": "^8.3.6",
 		"vite": "^2.4.4"
 	},
 	"dependencies": {
+		"axios": "^0.21.1",
 		"chart.js": "^3.5.0",
-		"comma-separated-values": "^3.6.4",
+		"dayjs": "^1.10.6",
 		"lit-html": "^1.4.1",
+		"papaparse": "^5.3.1",
 		"tailwindcss": "^2.2.7"
 	}
 }
