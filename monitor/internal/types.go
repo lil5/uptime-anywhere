@@ -7,20 +7,22 @@ const (
 )
 
 type ConfigSite struct {
-	Name string `required:"true"`
-	Url  string `required:"true"`
+	Name string `required:"true" json:"name"`
+	Url  string `required:"true" json:"url"`
 }
 
 type Config struct {
-	Owner string       `required:"true"`
-	Repo  string       `required:"true"`
-	Sites []ConfigSite `required:"true"`
+	Host   string       `required:"true" json:"host"`
+	Owner  string       `required:"true" json:"owner"`
+	Repo   string       `required:"true" json:"repo"`
+	Branch string       `required:"true" json:"branch"`
+	Sites  []ConfigSite `required:"true" json:"sites"`
 }
 
 type ResultSite struct {
-	Name        string
-	Status      string
-	RequestTime int
-	HttpCode    int
-	Timestamp   string
+	Name         string
+	Status       string
+	ResponseTime int
+	HttpCode     int
+	Timestamp    string
 }
