@@ -1,6 +1,6 @@
 import axios from "axios"
 import csv, { ParseConfig } from "papaparse"
-import { CSVLine, DataSite, Config, ConfigSite } from "../types"
+import type { CSVLine, RawDataSite, Config, ConfigSite } from "../types"
 
 const CSV_OPTIONS: ParseConfig = {
 	newline: "\n",
@@ -16,15 +16,16 @@ const CSV_OPTIONS: ParseConfig = {
 	skipEmptyLines: true,
 }
 
-export function getSiteCsvs(c: Config): Promise<DataSite>[] {
-	let a: Promise<DataSite>[] = []
+export async function getSiteCsvs(c: Config): PromiseSettle<RawDataSite> {
+	let a: Promise<RawDataSite>[] = []
 	for (let site of c.sites) {
 		a.push(getSiteCsv(c, site))
 	}
-	return a
+
+	return await Promise.allSettled(a)
 }
 
-async function getSiteCsv(c: Config, site: ConfigSite): Promise<DataSite> {
+async function getSiteCsv(c: Config, site: ConfigSite): Promise<RawDataSite> {
 	const url = genUrlByHost(c, site.name)
 	const res = await axios.get(url)
 

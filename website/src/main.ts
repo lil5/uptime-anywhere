@@ -1,10 +1,10 @@
-import { CalculatedDataSite, PromiseSettle } from "./types"
+import type { PromiseSettle, RawDataSite } from "./types"
 
 import { getSiteCsvs } from "./api/sites"
 import { getConfig } from "./api/config"
 
-import { calcData } from "./data"
-import { renderChart, renderHtml } from "./html/render"
+import LiveStatusList from "./components/LiveStatusList.svelte"
+import { ERROR_GET_ELEMENT_BY_ID } from "./errors"
 
 async function init() {
 	const waitLoad = waitDocumentLoad()
@@ -12,8 +12,7 @@ async function init() {
 
 	const [, data] = await Promise.all([waitLoad, waitData])
 
-	renderHtml(data)
-	renderChart(data)
+	render(data)
 }
 init()
 
@@ -23,11 +22,22 @@ async function waitDocumentLoad() {
 	)
 }
 
-async function prepareData(): PromiseSettle<CalculatedDataSite> {
+async function prepareData(): PromiseSettle<RawDataSite> {
 	const config = await getConfig()
-	const csvs = getSiteCsvs(config)
+	const csvs = await getSiteCsvs(config)
 
-	const data = await calcData(csvs, [7, "days"])
+	return csvs
+}
 
-	return data
+function render(data: PromiseSettledResult<RawDataSite>[]) {
+	const elSections = document.getElementById("sections")
+	if (!elSections) throw Error(ERROR_GET_ELEMENT_BY_ID("sections"))
+
+	elSections.innerHTML = ""
+	new LiveStatusList({
+		target: elSections,
+		props: {
+			data,
+		},
+	})
 }
