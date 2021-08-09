@@ -25,37 +25,40 @@ export interface Config {
 	sites: ConfigSite[]
 }
 
-// ---- Data ----
+// ---- API ----
 
-export interface DataSite {
+export interface RawDataSite {
 	name: string
 	url: string
 	csv: CSVLine[]
 	csvLength: number
 }
 
-export interface CalculatedDataSite {
-	name: string
-	url: string
-	averageResponseTime: number
-	percentageUptime: number
-	chartMaxY: number
-	data: DataItem[]
-}
-export interface DataItem extends CalculatedDataItem, ChartDataItem {}
-
-export interface CalculatedDataItem {
+export interface DataItem {
 	status: Status
 	responseTime: number
 	httpCode: number
 	timestamp: Dayjs
-}
-export interface ChartDataItem {
-	status: Status
-	httpCode: number
-	timestamp: Dayjs
 	x: number
 	y: number
+}
+
+// ---- Props ----
+
+export interface LiveStatusProps {
+	status: Status
+	name: string
+	link: string
+	icon: string
+	percentageUptime: number
+	avgResponseTime: number
+	chart: DataItem[]
+}
+
+export interface LiveStatusErrorProps {
+	status: "error"
+	title: string
+	err: Error
 }
 
 // ---- Utilities ----

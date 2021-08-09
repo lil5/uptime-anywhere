@@ -1,7 +1,7 @@
 import axios from "axios"
 import yaml from "js-yaml"
 
-import { Config } from "../types"
+import type { Config } from "../types"
 
 //@ts-expect-error
 const CONFIG_URL: string = globalThis["config"]
