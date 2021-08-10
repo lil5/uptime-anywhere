@@ -8,14 +8,7 @@ const CONFIG_URL: string = globalThis["config"]
 
 export async function getConfig(): Promise<Config> {
 	// get from host
-	const res = await axios.get<string>(CONFIG_URL)
+	const res = await axios.get<Config>(CONFIG_URL)
 
-	const data = yamlLoad<Config>(res.data)
-
-	return data
-}
-
-function yamlLoad<D>(str: string): D {
-	let res = yaml.load(str)
-	return res as any
+	return res.data
 }
