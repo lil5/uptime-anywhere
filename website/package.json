@@ -2,12 +2,11 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "svelte-check && vite build && cp -r build ../template-repo/"
+		"build": "svelte-check && vite build && rm -rf ../template-repo/website && mv build ../template-repo/website"
 	},
 	"devDependencies": {
 		"@sveltejs/vite-plugin-svelte": "^1.0.0-next.15",
 		"@tsconfig/svelte": "^2.0.1",
-		"@types/js-yaml": "^4.0.2",
 		"@types/papaparse": "^5.2.6",
 		"autoprefixer": "^10.3.1",
 		"postcss": "^8.3.6",
@@ -20,7 +19,6 @@
 		"axios": "^0.21.1",
 		"chart.js": "^3.5.0",
 		"dayjs": "^1.10.6",
-		"js-yaml": "^4.1.0",
 		"papaparse": "^5.3.1",
 		"tailwindcss": "^2.2.7"
 	}

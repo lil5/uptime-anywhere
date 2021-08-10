@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { DataItem } from "../types"
 
-	export let hidden: string | undefined
+	export let hidden: boolean = true
 	export let data: DataItem | undefined
 
 	const DATE_FORMAT = "YYYY-MM-DD HH:mm"
@@ -10,8 +10,10 @@
 	let top = 0
 
 	function mousemove(e: MouseEvent) {
-		left = e.pageX
-		top = e.pageY
+		if (!hidden) {
+			left = e.pageX
+			top = e.pageY
+		}
 	}
 </script>
 

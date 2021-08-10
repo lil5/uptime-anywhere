@@ -1,5 +1,10 @@
 node_modules
 .vscode
-website/dist
-repo/data/*.csv
+
+website/build
+
 monitor/data/*.csv
+
+template-repo/data/*.csv
+template-repo/.git
+template-repo/run

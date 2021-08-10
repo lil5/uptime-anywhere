@@ -19,7 +19,7 @@ const csvHeaders = "status,responseTime,httpCode,timestamp"
 func WriteConfigJSON(config *Config) error {
 	fp := filepath.Join("..", "data", "config.json")
 
-	contents, err := json.Marshal(config)
+	contents, err := json.MarshalIndent(config, "", "\t")
 	if err != nil {
 		return err
 	}
