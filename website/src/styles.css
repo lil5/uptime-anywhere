@@ -49,8 +49,6 @@
 	.card img {
 		width: 17px;
 		height: 17px;
-
-		@apply inline align-middle;
 	}
 
 	.card__chart {
