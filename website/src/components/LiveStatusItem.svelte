@@ -9,8 +9,10 @@
 
 <li class="card card--grid {classStatus}">
 	<h4>
-		<img src={site.icon} alt={`Favicon for ${site.name}`} />
-		<a href={site.link}>{site.name}</a>
+		<a href={site.link} target="_blank" title="Go to site">
+			<img class="align-middle inline-block" src={site.icon} alt="🌐" /></a
+		>
+		{site.name}
 	</h4>
 	<p>Overall uptime: {site.percentageUptime}%</p>
 	<p>Average response time: {site.avgResponseTime} ms</p>

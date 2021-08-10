@@ -39,6 +39,7 @@ function render(data: PromiseSettledResult<RawDataSite>[]) {
 		target: elBody,
 		props: {
 			hidden: true,
+			data: undefined,
 		},
 	})
 
