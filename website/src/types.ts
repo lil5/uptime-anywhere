@@ -44,6 +44,11 @@ export interface DataItem {
 }
 
 // ---- Props ----
+export interface ChartProps {
+	data: DataItem[]
+	currentTime: Dayjs
+	earliestTime: Dayjs
+}
 
 export interface LiveStatusProps {
 	status: Status
@@ -52,7 +57,7 @@ export interface LiveStatusProps {
 	icon: string
 	percentageUptime: number
 	avgResponseTime: number
-	chart: DataItem[]
+	chart: ChartProps
 }
 
 export interface LiveStatusErrorProps {

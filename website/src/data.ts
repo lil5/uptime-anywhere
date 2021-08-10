@@ -7,10 +7,11 @@ import type {
 	DataItem,
 	LiveStatusErrorProps,
 	LiveStatusProps,
+	Status,
 } from "./types"
 
-const CHART_WIDTH = 160
-const CHART_HEIGHT = 107
+const CHART_MAX_HEIGHT = 1200
+const CHART_MIN_HEIGHT = 20
 
 interface CSVLineWithDayjs extends Omit<CSVLine, "timestamp"> {
 	timestamp: Dayjs
@@ -24,17 +25,19 @@ export function calcData(
 
 	const earliestTime = currentTime.subtract(...timeframe)
 
-	return settledSiteList.map((s) => {
+	let sites = settledSiteList.map((s) => {
 		if (s.status === "rejected") {
 			return {
-				status: "error",
+				status: "error" as "error",
 				title: ERROR_REJECTED_SITE(s.reason),
-				err: s.reason,
+				err: s.reason as Error,
 			}
 		}
 
 		return calcDataItems(s.value, currentTime, earliestTime)
 	})
+
+	return sites
 }
 
 function calcDataItems(
@@ -68,7 +71,7 @@ function calcDataItems(
 	}
 	linesWithDayjs = linesWithDayjs.reverse()
 
-	const statistics = calcStatistics(linesWithDayjs, currentTime, earliestTime)
+	const statistics = calcStatistics(linesWithDayjs, currentTime)
 
 	let data: DataItem[] = linesWithDayjs.map((d, i) => {
 		return {
@@ -77,16 +80,24 @@ function calcDataItems(
 		}
 	})
 
-	let lastEntry = data[data.length - 1]
+	let lastEntry: DataItem | undefined = data[data.length - 1]
+	data.push({
+		...lastEntry,
+		x: currentTime.valueOf(),
+	})
 
 	return {
-		status: lastEntry.status,
+		status: lastEntry ? lastEntry.status : "up",
 		name: d.name,
 		link: d.url,
 		icon: toBaseURL(d.url) + "/favicon.ico",
 		percentageUptime: statistics.percentageUptime,
 		avgResponseTime: statistics.averageResponseTime,
-		chart: data,
+		chart: {
+			data,
+			currentTime,
+			earliestTime,
+		},
 	}
 }
 
@@ -101,16 +112,11 @@ interface Statistics {
 }
 function calcStatistics(
 	data: CSVLineWithDayjs[],
-	currentTime: Dayjs,
-	earliestTime: Dayjs
+	currentTime: Dayjs
 ): Statistics {
-	/** total weight measured by unix time  */
-	let timespanWeightUnix = currentTime.valueOf() - earliestTime.valueOf()
 	/** total weight difference between current and earliest time
 	 *  by unix time  */
 	let totalAvailibleWeightUnix = 0
-	/** total response time in milliseconds */
-	let totalResponseTime = 0
 	/** total weighted response time
 	 * that is each response time * weight in unix time
 	 */
@@ -119,8 +125,6 @@ function calcStatistics(
 	let maxResponseTime = 0
 	/** total unix time that status is "up" */
 	let totalUpWeightUnix = 0
-	/** unix time difference in an array where the index is keyed to data */
-	let perItemWeightUnix: number[] = []
 
 	data.forEach((d, i) => {
 		let nextDate: Dayjs
@@ -136,10 +140,8 @@ function calcStatistics(
 
 		if (d.status === "up") totalUpWeightUnix += weightUnix
 		if (maxResponseTime < d.responseTime) maxResponseTime = d.responseTime
-		totalResponseTime += d.responseTime
 		totalWeightUnixResponseTime += d.responseTime * weightUnix
 		totalAvailibleWeightUnix += weightUnix
-		perItemWeightUnix[i] = weightUnix
 	})
 
 	const averageResponseTime =
@@ -148,10 +150,13 @@ function calcStatistics(
 	const percentageUptime = (totalUpWeightUnix / totalAvailibleWeightUnix) * 100
 
 	/** list of dimintions of data */
-	const perItemDimentions = perItemWeightUnix.map((itemWeightUnix, i) => {
+	const perItemDimentions = data.map((d) => {
+		let y = d.responseTime
+		if (y > CHART_MAX_HEIGHT) y = CHART_MAX_HEIGHT
+		if (y < CHART_MIN_HEIGHT) y = CHART_MIN_HEIGHT
 		return {
-			x: (itemWeightUnix / totalAvailibleWeightUnix) * CHART_WIDTH,
-			y: (data[i].responseTime / totalResponseTime) * CHART_HEIGHT,
+			x: d.timestamp.valueOf(),
+			y,
 		}
 	})
 

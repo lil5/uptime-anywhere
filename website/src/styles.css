@@ -59,27 +59,4 @@
 
 		@apply absolute bottom-0 right-0 overflow-hidden;
 	}
-
-	table.chart {
-		@apply w-full h-full block;
-	}
-
-	table.chart thead,
-	table.chart tbody tr > * {
-		@apply hidden;
-	}
-
-	table.chart tbody {
-		@apply flex flex-row content-start items-end relative h-full w-full;
-	}
-	table.chart tbody tr {
-		width: var(--chart-col-w);
-		height: var(--chart-col-h);
-		min-height: 5px;
-
-		@apply inline-block relative;
-	}
-	#tooltip {
-		@apply block rounded-md border fixed border-gray-400 invisible;
-	}
 }
