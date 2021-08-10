@@ -1,17 +1,23 @@
-import type { ChartConfiguration } from "chart.js"
+import type {
+	ChartConfiguration,
+	BubbleDataPoint,
+	Chart,
+	ChartTypeRegistry,
+	ScatterDataPoint,
+	TooltipModel,
+} from "chart.js"
+import type { Dayjs } from "dayjs"
+import type { SvelteComponent } from "svelte"
+import type { DataItem } from "../types"
 
 const WARNING = "#F87171"
 const DEFAULT = "#89e0cf"
-const DATE_FORMAT = "YYYY-MM-DD HH:mm"
 
-interface S {
-	x: number
-	y: number
-}
-
-function config<D extends S>(
-	data: Array<D>
-): ChartConfiguration<"scatter", D[]> {
+export default function config(
+	data: DataItem[],
+	currentTime: Dayjs,
+	earliestTime: Dayjs
+): ChartConfiguration<"scatter", DataItem[]> {
 	return {
 		type: "scatter",
 		data: {
@@ -21,8 +27,8 @@ function config<D extends S>(
 					data,
 					borderWidth: -10,
 					segment: {
-						// backgroundColor: (ctx: any) =>
-						// 	data[ctx.p0DataIndex].status === "up" ? DEFAULT : WARNING,
+						backgroundColor: (ctx: any) =>
+							data[ctx.p0DataIndex].status === "up" ? DEFAULT : WARNING,
 					},
 				},
 			],
@@ -32,20 +38,15 @@ function config<D extends S>(
 			plugins: {
 				legend: { display: false },
 				tooltip: {
-					enabled: true,
-					displayColors: false,
-					callbacks: {
-						// label: (ctx: any) =>
-						// 	`${data[ctx.dataIndex].httpCode} ${data[ctx.dataIndex].w} ms`,
-						// afterLabel: (ctx: any) =>
-						// 	`${data[ctx.dataIndex].timestamp.format(DATE_FORMAT)}`,
-					},
+					enabled: false,
+					position: "nearest",
+					external: externalTooltipHandeler,
 				},
 			},
 			elements: {
 				line: {
 					stepped: true,
-					borderWidth: 0,
+					borderWidth: 3,
 				},
 			},
 			interaction: {
@@ -56,20 +57,15 @@ function config<D extends S>(
 			maintainAspectRatio: true,
 			aspectRatio: 160 / 107,
 			scales: {
-				y: {
-					min: 0,
-					max: 100,
-					display: false,
-				},
 				yAxis: {
 					display: false,
-				},
-				x: {
 					min: 0,
-					max: 160,
-					display: false,
+					max: 1200,
 				},
 				xAxis: {
+					type: "time",
+					min: earliestTime.valueOf(),
+					max: currentTime.valueOf(),
 					display: false,
 				},
 			},
@@ -77,4 +73,35 @@ function config<D extends S>(
 	}
 }
 
-export default config
+type ScatterChart = Chart<
+	keyof ChartTypeRegistry,
+	(number | ScatterDataPoint | BubbleDataPoint | null)[],
+	unknown
+>
+type Tooltip = TooltipModel<"scatter">
+
+function externalTooltipHandeler(ctx: {
+	chart: ScatterChart
+	tooltip: Tooltip
+}) {
+	const { tooltip } = ctx
+	let dataPoint = tooltip.dataPoints[0]
+
+	//@ts-ignore
+	let dataItem: DataItem = dataPoint.dataset.data[dataPoint.dataIndex]
+
+	//@ts-ignore
+	const compontent: SvelteComponent = globalThis["my-tooltip"]
+
+	let hidden = !tooltip.opacity
+
+	if (hidden) {
+		compontent.$set({ hidden: true })
+		return
+	}
+
+	compontent.$set({
+		hidden: false,
+		data: dataItem,
+	})
+}

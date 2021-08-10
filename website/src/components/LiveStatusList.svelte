@@ -15,23 +15,22 @@
 	type TimeOptions = "24H" | "7D" | "30D"
 	let selectedTimeScale: TimeOptions = "7D"
 
-	$: sites = runCalcData()
+	let sites: Array<LiveStatusProps | LiveStatusErrorProps>
 
-	function runCalcData(): Array<LiveStatusProps | LiveStatusErrorProps> {
-		let timeframe: Timeframe
-		switch (selectedTimeScale) {
+	$: {
+		let timeframe = timeOptionsToFrame(selectedTimeScale)
+		sites = calcData(data, timeframe)
+	}
+
+	function timeOptionsToFrame(to: TimeOptions): Timeframe {
+		switch (to) {
 			case "24H":
-				timeframe = [24, "hours"]
-				break
+				return [24, "hours"]
 			case "7D":
-				timeframe = [7, "days"]
-				break
+				return [7, "days"]
 			case "30D":
-				timeframe = [30, "days"]
-				break
+				return [30, "days"]
 		}
-
-		return calcData(data, timeframe)
 	}
 </script>
 

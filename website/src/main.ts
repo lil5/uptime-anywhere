@@ -4,6 +4,7 @@ import { getSiteCsvs } from "./api/sites"
 import { getConfig } from "./api/config"
 
 import LiveStatusList from "./components/LiveStatusList.svelte"
+import ChartTooltip from "./components/ChartTooltip.svelte"
 import { ERROR_GET_ELEMENT_BY_ID } from "./errors"
 
 async function init() {
@@ -30,6 +31,18 @@ async function prepareData(): PromiseSettle<RawDataSite> {
 }
 
 function render(data: PromiseSettledResult<RawDataSite>[]) {
+	// tooltip
+	const elBody = document.body
+
+	//@ts-ignore
+	globalThis["my-tooltip"] = new ChartTooltip({
+		target: elBody,
+		props: {
+			hidden: true,
+		},
+	})
+
+	// sections
 	const elSections = document.getElementById("sections")
 	if (!elSections) throw Error(ERROR_GET_ELEMENT_BY_ID("sections"))
 

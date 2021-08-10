@@ -15,6 +15,6 @@
 	<p>Overall uptime: {site.percentageUptime}%</p>
 	<p>Average response time: {site.avgResponseTime} ms</p>
 	<div class="card__chart">
-		<ChartTable data={site.chart} />
+		<ChartTable {...site.chart} />
 	</div>
 </li>
