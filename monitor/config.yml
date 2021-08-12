@@ -6,3 +6,5 @@ branch: main
 sites:
   - name: Google
     url: https://www.google.com
+
+githost_url: "https://github.com/lil5/uptime-anywhere"

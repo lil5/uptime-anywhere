@@ -1,9 +1,13 @@
 node_modules
 .vscode
+tmp
+
+data/*
 
 website/build
 
 monitor/data/*.csv
+monitor/run
 
 template-repo/data/*.csv
 template-repo/.git
