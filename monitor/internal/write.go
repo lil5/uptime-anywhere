@@ -9,6 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/icza/backscanner"
 )
 
 const DELIMITER = ","
@@ -28,23 +30,25 @@ func WriteConfigJSON(config *Config) error {
 	return err
 }
 
-func WriteAll(resultSites []*ResultSite) (bool, error) {
+func WriteAll(resultSites []*ResultSite) (bool, *[]*SiteStatusChange, error) {
 	hasAnyWitten := false
+	sscList := []*SiteStatusChange{}
 	for i, _ := range resultSites {
 		resultSite := resultSites[i]
-		hasWritten, err := write(resultSite)
+		hasWritten, ssc, err := write(resultSite)
 		if err != nil {
-			return false, err
+			return false, nil, err
 		}
 		if hasWritten {
 			hasAnyWitten = true
+			sscList = append(sscList, ssc)
 		}
 	}
 
-	return hasAnyWitten, nil
+	return hasAnyWitten, &sscList, nil
 }
 
-func write(resultSite *ResultSite) (bool, error) {
+func write(resultSite *ResultSite) (bool, *SiteStatusChange, error) {
 	hasWritten := false
 	csvData := strings.Join([]string{
 		resultSite.Status,
@@ -60,90 +64,116 @@ func write(resultSite *ResultSite) (bool, error) {
 	if exists {
 		file, err := os.OpenFile(fp, os.O_APPEND|os.O_RDWR, 0644)
 		if err != nil {
-			return hasWritten, err
+			return hasWritten, nil, err
 		}
 		defer file.Close()
 
 		// see if it is nessacary to write
-		if !shouldWrite(file, finfo, resultSite.Timestamp, resultSite.Status) {
-			return hasWritten, nil
+		ssc, err := getStatusChange(resultSite.Name, file, finfo, resultSite.Timestamp, resultSite.Status)
+		if err != nil {
+			return hasWritten, nil, err
+		}
+
+		if !ssc.ShouldWrite() {
+			return hasWritten, nil, nil
 		}
 
 		// append the data on to the existing file
 		s := fmt.Sprintf("\n%s", csvData)
 		_, err = file.WriteString(s)
 		if err != nil {
-			return hasWritten, err
+			return hasWritten, nil, err
 		} else {
 			hasWritten = true
+			return hasWritten, ssc, nil
 		}
 	} else {
 		// create file and write the csv headers then the first line of data
 		file, err := os.OpenFile(fp, os.O_WRONLY|os.O_CREATE, 0644)
 		if err != nil {
-			return hasWritten, err
+			return hasWritten, nil, err
 		}
 		defer file.Close()
 
 		s := fmt.Sprintf("%s\n%s", csvHeaders, csvData)
 		_, err = file.WriteString(s)
 		if err != nil {
-			return hasWritten, err
+			return hasWritten, nil, err
 		} else {
 			hasWritten = true
+			return hasWritten, &SiteStatusChange{
+				Name:          resultSite.Name,
+				First:         true,
+				ChangedToUp:   resultSite.Status == "up",
+				ChangedToDown: resultSite.Status != "up",
+			}, nil
 		}
 	}
-
-	return hasWritten, nil
 }
 
-func shouldWrite(
+func getStatusChange(
+	siteName string,
 	file *os.File,
 	finfo *fs.FileInfo,
 	currentTimestamp string,
 	currentStatus string,
-) bool {
+) (*SiteStatusChange, error) {
 	lastLine, err := readLastLine(file, finfo)
 	if err != nil {
-		fmt.Printf("Error: %r", err)
-		return true
+		return &SiteStatusChange{
+			Name:  siteName,
+			First: true,
+		}, nil
 	}
 
-	lastCsvData := strings.SplitN(lastLine, DELIMITER, 5)
-	if len(lastCsvData) < 5 {
-		fmt.Printf("Unable to read last entry: %s", lastLine)
-		return true
+	lastCsvData := strings.SplitN(lastLine, DELIMITER, 4)
+	if len(lastCsvData) < 4 {
+		returnErr := fmt.Errorf("unable to read last entry: %s\nLength is %d but should be 4", lastLine, len(lastCsvData))
+		return nil, returnErr
 	}
 
-	lastStatusStr := lastCsvData[1]
+	lastStatusStr := lastCsvData[0]
 	if lastStatusStr == "" {
-		fmt.Printf("Last entry status is empty")
-		return true
+		fmt.Printf("last entry status is empty\nlastStatusStr: '%s'\n%v\n", lastStatusStr, lastCsvData)
+		return &SiteStatusChange{
+			Name:       siteName,
+			LaterThanN: true,
+		}, nil
 	}
 	if lastStatusStr != currentStatus {
-		return true
+		if currentStatus == "up" {
+			return &SiteStatusChange{
+				Name:        siteName,
+				ChangedToUp: true,
+			}, nil
+		}
+
+		return &SiteStatusChange{
+			Name:          siteName,
+			ChangedToDown: true,
+		}, nil
 	}
 
-	lastDateStr := lastCsvData[4]
+	lastDateStr := lastCsvData[3]
 	lastTime, err := time.Parse(time.RFC3339, lastDateStr)
 	if err != nil {
-		fmt.Printf("unable to parse date from last entry: %r", err)
-		return true
+		returnErr := fmt.Errorf("unable to parse date from last entry: %r", err)
+		return nil, returnErr
 	}
 
 	currentTime, err := time.Parse(time.RFC3339, currentTimestamp)
 	if err != nil {
-		fmt.Printf("Unable to parse date from current entry: %r", err)
-		return true
+		returnErr := fmt.Errorf("unable to parse date from current entry: %r", err)
+		return nil, returnErr
 	}
 
 	lastTimePlusNHours := lastTime.Add(LATER_THAN)
 	isNotLaterThanNHours := currentTime.Before(lastTimePlusNHours)
-	if isNotLaterThanNHours {
-		return false
-	}
 
-	return true
+	return &SiteStatusChange{
+		Name:       siteName,
+		LaterThanN: !isNotLaterThanNHours,
+	}, nil
 }
 
 func isExists(fp string) (bool, *fs.FileInfo) {
@@ -156,13 +186,13 @@ func isExists(fp string) (bool, *fs.FileInfo) {
 	return true, &finfo
 }
 
-func readLastLine(file *os.File, finfo *fs.FileInfo) (string, error) {
-	buf := make([]byte, 62)
-	start := (*finfo).Size() - 62
-	_, err := file.ReadAt(buf, start)
+func readLastLine(f *os.File, stat *fs.FileInfo) (string, error) {
+	scanner := backscanner.New(f, int((*stat).Size()))
+
+	line, _, err := scanner.LineBytes()
 	if err != nil {
 		return "", err
 	}
-	s := fmt.Sprintf("%s", buf)
-	return s, nil
+
+	return string(line), nil
 }

@@ -1,7 +1,7 @@
 {
 	"scripts": {
 		"dev": "chokidar \"**/*.go\" \"config.yml\" -c \"npm run start\"",
-		"start": "go run main.go",
+		"start": "export DEV=true; go run main.go",
 		"build": "go build -o run && cp run ../template-repo/"
 	},
 	"devDependencies": {

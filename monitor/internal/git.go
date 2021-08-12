@@ -3,18 +3,15 @@ package internal
 import (
 	"fmt"
 	"os/exec"
-	"strings"
 )
 
-func RunGit(result []*ResultSite) error {
-	msg := buildMessage(result)
-
+func RunGit(message string) error {
 	err := runGitCommand([]string{"add", "data/*.csv"})
 	if err != nil {
 		return err
 	}
 
-	err = runGitCommand([]string{"commit", fmt.Sprintf("-m \"%s\"", msg)})
+	err = runGitCommand([]string{"commit", fmt.Sprintf("-m \"%s\"", message)})
 	if err != nil {
 		return err
 	}
@@ -25,29 +22,6 @@ func RunGit(result []*ResultSite) error {
 	}
 
 	return nil
-}
-
-func buildMessage(result []*ResultSite) string {
-	isAllUp := true
-	sitesDown := []string{}
-	for i, _ := range result {
-		site := result[i]
-		if site.Status != S_UP {
-			isAllUp = false
-			sitesDown = append(sitesDown, site.Name)
-			break
-		}
-	}
-
-	if isAllUp {
-		return "🟩 all sites are up"
-	}
-
-	sIsAre := "is"
-	if len(sitesDown) > 1 {
-		sIsAre = "are"
-	}
-	return fmt.Sprintf("🟥 %s %s down", strings.Join(sitesDown, ", "), sIsAre)
 }
 
 func runGitCommand(args []string) error {
