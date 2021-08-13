@@ -7,7 +7,7 @@ import (
 )
 
 // 2s
-const TIMEOUT = 2000000000
+const TIMEOUT = 2 * time.Second
 
 func CallAll(sites []ConfigSite) []*ResultSite {
 	h := &http.Client{

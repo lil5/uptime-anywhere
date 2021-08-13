@@ -2,13 +2,11 @@ node_modules
 .vscode
 tmp
 
-data/*
-
 website/build
 
-monitor/data/*.csv
+monitor/data/*
 monitor/run
 
-template-repo/data/*.csv
+template-repo/data/*
 template-repo/.git
 template-repo/run
