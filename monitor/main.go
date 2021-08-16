@@ -34,14 +34,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Printf("env is dev %t", envIsDev)
-
 	if !envIsDev {
 		err = internal.RunGit(message)
 		if err != nil {
 			fmt.Print(err)
 			os.Exit(1)
 		}
+	} else {
+		fmt.Println("Git will not run in dev mode")
 	}
 
 	internal.RunNotifications(config, message)

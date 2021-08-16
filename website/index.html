@@ -3,7 +3,29 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>SheetsPro</title>
+		<title>Uptime</title>
+
+		<link
+			rel="apple-touch-icon"
+			sizes="180x180"
+			href="./apple-touch-icon.png"
+		/>
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="32x32"
+			href="./favicon-32x32.png"
+		/>
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="16x16"
+			href="./favicon-16x16.png"
+		/>
+		<link rel="manifest" href="./site.webmanifest" />
+		<link rel="mask-icon" href="./safari-pinned-tab.svg" color="#10b981" />
+		<meta name="msapplication-TileColor" content="#f0f7f7" />
+		<meta name="theme-color" content="#f0f7f7" />
 
 		<script>
 			// default is ./data/config.json
@@ -18,29 +40,14 @@
 	</head>
 	<body class="bg-primary-100 flex flex-col min-h-screen">
 		<header class="w-full bg-white border-b border-primary-200">
-			<div
-				class="container mx-auto px-2 flex items-center justify-between h-16"
-			>
+			<div class="container flex items-center justify-between h-16">
 				<p class="font-bold">Uptime Anywhere</p>
 
-				<a
-					class="
-						font-light
-						p-2
-						rounded
-						mx-2
-						hover:bg-primary-200
-						hover:bg-opacity-25
-						hover:shadow-inner
-						hover:text-blue-900
-					"
-					href="https://github.com/lil5/uppptime"
-					>GitHub</a
-				>
+				<ul id="links"></ul>
 			</div>
 		</header>
 
-		<main class="py-6 px-2 container mx-auto flex-grow">
+		<main class="py-6 container flex-grow">
 			<h1 class="text-3xl mb-8">
 				<strong>Uptime&nbsp;Anywhere</strong> is an&nbsp;open&#8209;source<br />
 				uptime&nbsp;monitor and status&nbsp;page
@@ -59,19 +66,18 @@
 				</section>
 			</div>
 		</main>
-		<footer class="text-primary-300">
+		<footer class="container text-primary-300">
 			<ul
 				class="
-					p-4
+					py-4
 					grid grid-flow-row
 					sm:grid-flow-col
 					justify-center
-					sm:justify-start
 					gap-4
 					text-center
 					sm:text-left
-					opacity-80
-					hover:opacity-100
+					opacity-60
+					hover:opacity-80
 				"
 			>
 				<li>
