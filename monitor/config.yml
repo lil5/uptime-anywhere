@@ -1,4 +1,4 @@
-host: "http://localhost:3000/public/{{site}}.csv"
+host: "http://localhost:3000/data/{{site}}.csv"
 owner: myusername
 repo: myreponame
 branch: main

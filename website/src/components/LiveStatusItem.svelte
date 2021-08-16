@@ -9,7 +9,7 @@
 
 <li class="card card--grid {classStatus}">
 	<h4>
-		<a href={site.link} target="_blank" title="Go to site">
+		<a href={site.link} target="_blank" rel="noreferrer" title="Go to site">
 			<img class="align-middle inline-block" src={site.icon} alt="🌐" /></a
 		>
 		{site.name}

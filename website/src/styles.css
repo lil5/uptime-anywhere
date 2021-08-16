@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer components {
+	.container {
+		@apply px-2 max-w-screen-md w-full mx-auto;
+	}
 	.section {
 		@apply mb-8;
 	}
@@ -36,6 +39,8 @@
 		@apply border-green-500 bg-white;
 	}
 	.card--danger {
+		border-left-style: dashed;
+
 		@apply border-red-600 bg-red-100;
 	}
 	.card--grid {

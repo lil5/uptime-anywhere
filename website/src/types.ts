@@ -1,4 +1,4 @@
-import { Dayjs, OpUnitType } from "dayjs"
+import type { Dayjs, OpUnitType } from "dayjs"
 
 export type Status = "up" | "down"
 
@@ -13,6 +13,9 @@ export interface CSVLine {
 
 // ---- Config ----
 
+export interface ConfigNotifications {
+	smtp: boolean
+}
 export interface ConfigSite {
 	name: string
 	url: string
@@ -23,6 +26,9 @@ export interface Config {
 	repo: string
 	branch: string
 	sites: ConfigSite[]
+	notifications: ConfigNotifications
+	website_url: string
+	githost_url: string
 }
 
 // ---- API ----
