@@ -12,7 +12,7 @@ type ConfigSite struct {
 }
 
 type ConfigNotifications struct {
-	Smtp bool `default:"false" yaml:"smtp"`
+	Smtp bool `default:"false" json:"smtp" yaml:"smtp"`
 }
 
 type Config struct {
