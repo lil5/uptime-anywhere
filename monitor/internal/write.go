@@ -16,10 +16,12 @@ import (
 const DELIMITER = ","
 const LATER_THAN = 6 * time.Hour
 
+var basePath = filepath.Join("website", "data")
+
 const csvHeaders = "status,responseTime,httpCode,timestamp"
 
 func WriteConfigJSON(config *Config) error {
-	fp := filepath.Join("data", "config.json")
+	fp := filepath.Join(basePath, "config.json")
 
 	contents, err := json.MarshalIndent(config, "", "\t")
 	if err != nil {
@@ -57,7 +59,7 @@ func write(resultSite *ResultSite) (bool, *SiteStatusChange, error) {
 		resultSite.Timestamp,
 	}, DELIMITER)
 
-	fp := filepath.Join("data", fmt.Sprintf("%s.csv", resultSite.Name))
+	fp := filepath.Join(basePath, fmt.Sprintf("%s.csv", resultSite.Name))
 
 	exists, finfo := isExists(fp)
 
