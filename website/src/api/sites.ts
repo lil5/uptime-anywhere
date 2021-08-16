@@ -42,9 +42,9 @@ async function getSiteCsv(c: Config, site: ConfigSite): Promise<RawDataSite> {
 function genUrlByHost(c: Config, site: string): string {
 	switch (c.host) {
 		case "gitlab":
-			return `https://gitlab.com/${c.owner}/${c.repo}/-/raw/${c.branch}/data/${site}.csv`
+			return `./data/${site}.csv`
 		case "github":
-			return `https://raw.githubusercontent.com/${c.owner}/${c.repo}/${c.branch}/data/${site}.csv`
+			return `https://raw.githubusercontent.com/${c.owner}/${c.repo}/${c.branch}/website/data/${site}.csv`
 		default:
 			return c.host
 				.replace("{{owner}}", c.owner)

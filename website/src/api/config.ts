@@ -1,10 +1,9 @@
 import axios from "axios"
-import yaml from "js-yaml"
 
 import type { Config } from "../types"
 
 //@ts-expect-error
-const CONFIG_URL: string = globalThis["config"]
+const CONFIG_URL: string = globalThis["config"] || "./data/config.json"
 
 export async function getConfig(): Promise<Config> {
 	// get from host
