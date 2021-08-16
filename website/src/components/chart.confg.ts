@@ -9,6 +9,7 @@ import type {
 import type { Dayjs } from "dayjs"
 import type { SvelteComponent } from "svelte"
 import type { DataItem } from "../types"
+import pattern from "patternomaly"
 
 const WARNING = "#F87171"
 const DEFAULT = "#89e0cf"
@@ -28,7 +29,9 @@ export default function config(
 					borderWidth: -10,
 					segment: {
 						backgroundColor: (ctx: any) =>
-							data[ctx.p0DataIndex].status === "up" ? DEFAULT : WARNING,
+							data[ctx.p0DataIndex].status === "up"
+								? DEFAULT
+								: pattern.draw("zigzag-vertical", WARNING),
 					},
 				},
 			],
