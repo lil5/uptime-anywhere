@@ -10,9 +10,9 @@
 
 	let link: Link | undefined
 	$: {
-		if (config.githost_url) {
+		if (config.url) {
 			link = {
-				url: config.githost_url,
+				url: config.url,
 				name: "CI",
 			}
 		}

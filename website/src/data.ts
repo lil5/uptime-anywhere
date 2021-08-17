@@ -7,7 +7,6 @@ import type {
 	DataItem,
 	LiveStatusErrorProps,
 	LiveStatusProps,
-	Status,
 } from "./types"
 
 const CHART_MAX_HEIGHT = 1200

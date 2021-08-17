@@ -1,10 +1,8 @@
 package internal
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/fs"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -16,21 +14,9 @@ import (
 const DELIMITER = ","
 const LATER_THAN = 6 * time.Hour
 
-var basePath = filepath.Join("website", "data")
+var basePath = filepath.Join("public", "data")
 
 const csvHeaders = "status,responseTime,httpCode,timestamp"
-
-func WriteConfigJSON(config *Config) error {
-	fp := filepath.Join(basePath, "config.json")
-
-	contents, err := json.MarshalIndent(config, "", "\t")
-	if err != nil {
-		return err
-	}
-
-	err = ioutil.WriteFile(fp, contents, 0644)
-	return err
-}
 
 func WriteAll(resultSites []*ResultSite) (bool, *[]*SiteStatusChange, error) {
 	hasAnyWitten := false

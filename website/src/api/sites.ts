@@ -1,4 +1,3 @@
-import axios from "axios"
 import csv, { ParseConfig } from "papaparse"
 import type { CSVLine, RawDataSite, Config, ConfigSite } from "../types"
 
@@ -19,17 +18,18 @@ const CSV_OPTIONS: ParseConfig = {
 export async function getSiteCsvs(c: Config): PromiseSettle<RawDataSite> {
 	let a: Promise<RawDataSite>[] = []
 	for (let site of c.sites) {
-		a.push(getSiteCsv(c, site))
+		a.push(getSiteCsv(site))
 	}
 
 	return await Promise.allSettled(a)
 }
 
-async function getSiteCsv(c: Config, site: ConfigSite): Promise<RawDataSite> {
-	const url = genUrlByHost(c, site.name)
-	const res = await axios.get(url)
+async function getSiteCsv(site: ConfigSite): Promise<RawDataSite> {
+	const url = genUrlByHost(site.name)
+	const res = await fetch(url, { cache: "no-cache" })
+	const resBody = await res.text()
 
-	const data = csv.parse<CSVLine>(res.data, CSV_OPTIONS)
+	const data = csv.parse<CSVLine>(resBody, CSV_OPTIONS)
 
 	return {
 		name: site.name,
@@ -39,17 +39,14 @@ async function getSiteCsv(c: Config, site: ConfigSite): Promise<RawDataSite> {
 	}
 }
 
-function genUrlByHost(c: Config, site: string): string {
-	switch (c.host) {
-		case "gitlab":
-			return `./data/${site}.csv`
-		case "github":
-			return `https://raw.githubusercontent.com/${c.owner}/${c.repo}/${c.branch}/website/data/${site}.csv`
-		default:
-			return c.host
-				.replace("{{owner}}", c.owner)
-				.replace("{{repo}}", c.repo)
-				.replace("{{branch}}", c.branch)
-				.replace("{{site}}", site)
+function genUrlByHost(site: string): string {
+	let siteDir = "./data/"
+	//@ts-ignore
+	const globalSiteDir = globalThis["siteDir"]
+
+	if (globalSiteDir) {
+		siteDir = globalSiteDir
 	}
+
+	return `${siteDir}${site}.csv`
 }

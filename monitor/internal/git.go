@@ -6,7 +6,7 @@ import (
 )
 
 func RunGit(message string) error {
-	err := runGitCommand([]string{"add", "website/data/"})
+	err := runGitCommand([]string{"add", "public/data/"})
 	if err != nil {
 		return err
 	}

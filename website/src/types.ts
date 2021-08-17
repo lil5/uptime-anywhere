@@ -13,22 +13,13 @@ export interface CSVLine {
 
 // ---- Config ----
 
-export interface ConfigNotifications {
-	smtp: boolean
-}
 export interface ConfigSite {
 	name: string
 	url: string
 }
 export interface Config {
-	host: string
-	owner: string
-	repo: string
-	branch: string
 	sites: ConfigSite[]
-	notifications: ConfigNotifications
-	website_url: string
-	githost_url: string
+	url: string
 }
 
 // ---- API ----
