@@ -1,0 +1,22 @@
+default:
+  image: ubuntu:18.04
+
+pages:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  artifacts:
+    paths:
+      - public
+  before_script:
+    - "which git || ( apt-get update -y && apt-get install git -y )"
+    - git config user.name "uptime"
+    - git config user.email "<>"
+    - git config push.default "current"
+  script:
+    - git remote rm origin || true
+    - git remote add origin "https://${GITLAB_USER_NAME}:${CI_ACCESS_TOKEN}@${CI_REPOSITORY_URL#*@}"
+    - git checkout $CI_COMMIT_BRANCH || git checkout -b $CI_COMMIT_BRANCH
+    - git fetch
+    - git branch --set-upstream-to=origin/$CI_COMMIT_BRANCH $CI_COMMIT_BRANCH
+    - git pull
+    - ./run
