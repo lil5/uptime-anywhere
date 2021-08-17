@@ -19,3 +19,5 @@ template/public/*.svg
 template/public/browserconfig.xml
 template/public/favicon.ico
 template/public/site.webmanifest
+
+template.zip
