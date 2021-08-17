@@ -6,12 +6,16 @@ website/build
 monitor/data/*
 monitor/run
 
-template-repo/data/*
-template-repo/.git
-template-repo/run
-!template-repo/public/index.html
-!template-repo/.gitlab-ci.yml
-!template-repo/data/.gitkeep
-!template-repo/data/config.json
-!template-repo/public/index.html
-template-repo/public/*
+template/public/assets
+template/public/data/*
+!template/public/data/.gitkeep
+!template/public/data/config.json
+
+template/.git
+template/run
+
+template/public/*.png
+template/public/*.svg
+template/public/browserconfig.xml
+template/public/favicon.ico
+template/public/site.webmanifest

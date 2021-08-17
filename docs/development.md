@@ -4,7 +4,7 @@
 
 - `docs`: Markdown documentation about this prodject
 - `monitor`: A golang cli applicaton
-- `template-repo`: Location for built files to include in the release
+- `template`: Location for built files to include in the release
 - `website`: A [svelte js](https://svelte.dev/) application using [tailwindcss](https://tailwindcss.com/)
   Only the reactive parts of the application are rendered by svelte the loading html is directly written in `index.html`
 
@@ -45,7 +45,14 @@ It is expected that you have installed **GoLang** and **NodeJS** on your compute
 3. Run `npm run build`
 4. Change dir to monitor `cd ../monitor`
 5. Run `npm run build`
-6. The result is inside `template-repo`
+6. The result is inside `template`
+
+**GitHub Release**
+Zip the result and then add to release documents
+
+```sh
+zip -r template.zip template
+```
 
 ## JavaScript Flow
 

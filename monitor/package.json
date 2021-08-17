@@ -1,8 +1,8 @@
 {
 	"scripts": {
-		"dev": "chokidar \"**/*.go\" \"config.yml\" -c \"npm run start\"",
+		"dev": "chokidar \"**/*.go\" \"public/data/config.json\" -c \"npm run start\"",
 		"start": "export DEV=true; go run main.go",
-		"build": "go build -o run && cp run ../template-repo/"
+		"build": "go build -o run && cp run ../template/"
 	},
 	"devDependencies": {
 		"chokidar-cli": "^3.0.0"
