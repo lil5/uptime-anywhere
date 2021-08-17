@@ -1,11 +1,21 @@
 package internal
 
-import "github.com/jinzhu/configor"
+import (
+	"io/ioutil"
+	"path/filepath"
 
-func LoadConfig() *Config {
+	"encoding/json"
+)
+
+func LoadConfig() (*Config, error) {
 	config := Config{}
+	fpath := filepath.Join("public", "data", "config.json")
 
-	configor.Load(&config, "config.yml")
+	file, err := ioutil.ReadFile(fpath)
+	if err != nil {
+		return nil, err
+	}
+	json.Unmarshal([]byte(file), &config)
 
-	return &config
+	return &config, nil
 }

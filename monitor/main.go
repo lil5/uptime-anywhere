@@ -4,11 +4,22 @@ import (
 	"fmt"
 	"os"
 
+	flag "github.com/ogier/pflag"
 	"li.last.nl/uppptime/internal"
 )
 
 func main() {
-	config := internal.LoadConfig()
+	// configurations from cli
+	hasSMTP := flag.Bool("smtp", false, "Will try to email notifications using SMTP credentials")
+	hasSlack := flag.Bool("slack", false, "Will try to slack notifications")
+	flag.Parse()
+
+	// configurations from config.yml
+	config, err := internal.LoadConfig()
+	if err != nil {
+		fmt.Print(err)
+		os.Exit(1)
+	}
 	envIsDev := os.Getenv("DEV") == "true"
 
 	result := internal.CallAll(config.Sites)
@@ -28,12 +39,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	err = internal.WriteConfigJSON(config)
-	if err != nil {
-		fmt.Print(err)
-		os.Exit(1)
-	}
-
 	if !envIsDev {
 		err = internal.RunGit(message)
 		if err != nil {
@@ -44,5 +49,5 @@ func main() {
 		fmt.Println("Git will not run in dev mode")
 	}
 
-	internal.RunNotifications(config, message)
+	internal.RunNotifications(config, message, *hasSMTP, *hasSlack)
 }

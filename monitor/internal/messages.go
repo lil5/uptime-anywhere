@@ -14,6 +14,11 @@ const (
 	e_TIMER   = "📅"
 )
 
+const (
+	M_HTML     = 1
+	M_MARKDOWN = 2
+)
+
 func BuildMessage(resultSites []*ResultSite, sscList []*SiteStatusChange) (string, error) {
 	changedToUp := []string{}
 	changedToDown := []string{}
@@ -93,19 +98,22 @@ func grammerIsAre(n int) string {
 	return result
 }
 
-func BuildMessageBody(c *Config) string {
-	bodyTemplate := "For more information please go to the webste status page%s.<br>Or go to the git hosting page%s."
-	linkTemplate := " <a href=\"%s\" alt=\"%s\">link</a>"
+func BuildMessageBody(c *Config, m int) string {
+	bodyTemplate := "For more information please go to the webste status page %s."
+
+	linkTemplate := ""
+	switch m {
+	case M_HTML:
+		linkTemplate = "<a href=\"%s\" alt=\"Status Webpage\">link</a>"
+		break
+	case M_MARKDOWN:
+		linkTemplate = "[link](%s)"
+	}
 
 	websiteALink := ""
-	if c.WebsiteUrl != "" {
-		websiteALink = fmt.Sprintf(linkTemplate, c.WebsiteUrl, "Status Webpage")
+	if c.Url != "" && linkTemplate != "" {
+		websiteALink = fmt.Sprintf(linkTemplate, c.Url)
 	}
 
-	gitsiteALink := ""
-	if c.GithostUrl != "" {
-		gitsiteALink = fmt.Sprintf(linkTemplate, c.GithostUrl, "Git Hosting Site")
-	}
-
-	return fmt.Sprintf(bodyTemplate, websiteALink, gitsiteALink)
+	return fmt.Sprintf(bodyTemplate, websiteALink)
 }

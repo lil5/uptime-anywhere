@@ -6,15 +6,15 @@ import (
 	"os"
 	"strconv"
 
-	// slack "github.com/ashwanthkumar/slack-go-webhook"
+	slack "github.com/ashwanthkumar/slack-go-webhook"
 
 	gomail "gopkg.in/gomail.v2"
 )
 
-func RunNotifications(c *Config, message string) {
-	body := BuildMessageBody(c)
+func RunNotifications(c *Config, message string, hasSMTP bool, hasSlack bool) {
 
-	if c.Notifications.Smtp {
+	if hasSMTP {
+		body := BuildMessageBody(c, M_HTML)
 		ok := runSmtp(message, body)
 
 		if !ok {
@@ -22,26 +22,37 @@ func RunNotifications(c *Config, message string) {
 			os.Exit(1)
 		}
 	}
+
+	if hasSlack {
+		body := BuildMessageBody(c, M_MARKDOWN)
+		ok := runSlack(fmt.Sprintf("%s\n\n%s", message, body))
+
+		if !ok {
+			fmt.Print("Slack not sent!")
+			os.Exit(1)
+		}
+	}
 }
 
-// func runSlack(msg string) (ok bool) {
-// 	webhookUrl := os.Getenv("SLACK_WEBHOOK_URL")
-// 	channel := os.Getenv("SLACK_CHANNEL")
+func runSlack(msg string) (ok bool) {
+	username := os.Getenv("SLACK_USERNAME")
+	webhookUrl := os.Getenv("SLACK_WEBHOOK_URL")
+	channel := os.Getenv("SLACK_CHANNEL")
 
-// 	payload := slack.Payload{
-// 		Text:     msg,
-// 		Username: username,
-// 		Channel:  channel,
-// 	}
-// 	err := slack.Send(webhookUrl, "", payload)
-// 	if len(err) > 0 {
-// 		fmt.Printf("error: %s\n", err)
-// 	} else {
-// 		ok = true
-// 	}
+	payload := slack.Payload{
+		Text:     msg,
+		Username: username,
+		Channel:  channel,
+	}
+	err := slack.Send(webhookUrl, "", payload)
+	if len(err) > 0 {
+		fmt.Printf("error: %s\n", err)
+	} else {
+		ok = true
+	}
 
-// 	return ok
-// }
+	return ok
+}
 
 func runSmtp(title string, body string) (ok bool) {
 	host := os.Getenv("SMTP_HOST")

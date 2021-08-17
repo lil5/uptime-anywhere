@@ -2,7 +2,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "svelte-check && vite build && rm -rf ../template-repo/website && mv build ../template-repo/website && mkdir ../template-repo/website/data && touch ../template-repo/website/data/.gitkeep"
+		"build": "svelte-check && vite build && rm -rf ../template-repo/public && mv build ../template-repo/public && mkdir ../template-repo/public/data && touch ../template-repo/public/data/.gitkeep"
 	},
 	"devDependencies": {
 		"@sveltejs/vite-plugin-svelte": "^1.0.0-next.15",
@@ -16,7 +16,6 @@
 		"vite": "^2.4.4"
 	},
 	"dependencies": {
-		"axios": "^0.21.1",
 		"chart.js": "^3.5.0",
 		"dayjs": "^1.10.6",
 		"papaparse": "^5.3.1",
