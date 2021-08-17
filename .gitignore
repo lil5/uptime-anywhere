@@ -1,5 +1,4 @@
 node_modules
-.vscode
 tmp
 
 website/build
@@ -10,3 +9,9 @@ monitor/run
 template-repo/data/*
 template-repo/.git
 template-repo/run
+!template-repo/public/index.html
+!template-repo/.gitlab-ci.yml
+!template-repo/data/.gitkeep
+!template-repo/data/config.json
+!template-repo/public/index.html
+template-repo/public/*
