@@ -67,7 +67,7 @@ func write(resultSite *ResultSite) (bool, *SiteStatusChange, error) {
 		}
 
 		// append the data on to the existing file
-		s := fmt.Sprintf("\n%s", csvData)
+		s := fmt.Sprintf("%s\n", csvData)
 		_, err = file.WriteString(s)
 		if err != nil {
 			return hasWritten, nil, err
@@ -83,7 +83,7 @@ func write(resultSite *ResultSite) (bool, *SiteStatusChange, error) {
 		}
 		defer file.Close()
 
-		s := fmt.Sprintf("%s\n%s", csvHeaders, csvData)
+		s := fmt.Sprintf("%s\n%s\n", csvHeaders, csvData)
 		_, err = file.WriteString(s)
 		if err != nil {
 			return hasWritten, nil, err
@@ -180,6 +180,13 @@ func readLastLine(f *os.File, stat *fs.FileInfo) (string, error) {
 	line, _, err := scanner.LineBytes()
 	if err != nil {
 		return "", err
+	}
+
+	if string(line) == "" {
+		line, _, err = scanner.LineBytes()
+		if err != nil {
+			return "", err
+		}
 	}
 
 	return string(line), nil
