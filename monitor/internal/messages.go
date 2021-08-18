@@ -27,7 +27,7 @@ func BuildMessage(resultSites []*ResultSite, sscList []*SiteStatusChange) (strin
 	// noChangeAndIsUp := []string{}
 	noChangeAndIsDown := []string{}
 
-	for i, _ := range sscList {
+	for i := range sscList {
 		ssc := sscList[i]
 		if ssc == nil {
 			return "", fmt.Errorf("cannot find SiteStatusChange item\nindex: %d\narr: %v", i, sscList)
@@ -105,7 +105,6 @@ func BuildMessageBody(c *Config, m int) string {
 	switch m {
 	case M_HTML:
 		linkTemplate = "<a href=\"%s\" alt=\"Status Webpage\">link</a>"
-		break
 	case M_MARKDOWN:
 		linkTemplate = "[link](%s)"
 	}
