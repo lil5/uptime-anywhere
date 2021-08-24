@@ -1,3 +1,5 @@
+![GitHub](https://img.shields.io/github/license/lil5/uptime-anywhere?style=for-the-badge)
+
 # Uptime Anywhere
 
 A lighter version of [upptime](https://upptime.js.org/) that can run anywhere!
