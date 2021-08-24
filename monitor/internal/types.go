@@ -7,13 +7,18 @@ const (
 )
 
 type ConfigSite struct {
-	Name string `required:"true" json:"name" yaml:"name"`
-	Url  string `required:"true" json:"url" yaml:"url"`
+	Name                string `json:"name" required:"true"`
+	Url                 string `json:"url" required:"true"`
+	Icon                string `json:"icon"`
+	Method              string `json:"method"`
+	MaxResponseTime     int    `json:"maxResponseTime"`
+	Insecure            bool   `json:"insecure"`
+	ExpectedStatusCodes []int  `json:"expectedStatusCodes"`
 }
 
 type Config struct {
-	Sites []ConfigSite `required:"true" json:"sites" yaml:"sites"`
-	Url   string       `json:"url" yaml:"url"`
+	Sites []ConfigSite `json:"sites" required:"true"`
+	Url   string       `json:"url"`
 }
 
 type ResultSite struct {

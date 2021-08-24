@@ -1,24 +1,20 @@
 package internal
 
 import (
+	"crypto/tls"
 	"net/http"
 	"sync"
 	"time"
 )
 
-// 2s
-const TIMEOUT = 2 * time.Second
+const TIMEOUT = 3 * time.Second
 
 func CallAll(sites []ConfigSite) []*ResultSite {
-	h := &http.Client{
-		Timeout: TIMEOUT,
-	}
-
 	var wg sync.WaitGroup
 	cR := make(chan *ResultSite)
 	for _, site := range sites {
 		wg.Add(1)
-		go callAsync(wg, cR, h, site)
+		go callAsync(wg, cR, site)
 	}
 
 	results := []*ResultSite{}
@@ -30,16 +26,33 @@ func CallAll(sites []ConfigSite) []*ResultSite {
 	return results
 }
 
-func callAsync(wg sync.WaitGroup, c chan *ResultSite, h *http.Client, site ConfigSite) {
+func callAsync(wg sync.WaitGroup, c chan *ResultSite, site ConfigSite) {
 	defer wg.Done()
-	res := call(h, site)
+	res := call(site)
 
 	c <- res
 }
 
-func call(h *http.Client, site ConfigSite) *ResultSite {
+func call(site ConfigSite) *ResultSite {
 	status := S_DOWN
-	request, _ := http.NewRequest(http.MethodGet, site.Url, nil)
+	method := http.MethodGet
+	if isMethod(site.Method) {
+		method = site.Method
+
+	}
+	request, _ := http.NewRequest(method, site.Url, nil)
+
+	h := &http.Client{
+		Timeout: TIMEOUT,
+	}
+	if site.Insecure {
+		h.Transport = &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		}
+	}
+	if site.MaxResponseTime > 0 {
+		h.Timeout = time.Duration(site.MaxResponseTime)
+	}
 
 	timer := time.Now()
 	var resp *http.Response
@@ -71,4 +84,12 @@ func call(h *http.Client, site ConfigSite) *ResultSite {
 
 func getTimestampNow() string {
 	return time.Now().Format(time.RFC3339)
+}
+
+func isMethod(m string) bool {
+	switch m {
+	case http.MethodGet, http.MethodHead, http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete, http.MethodConnect, http.MethodOptions, http.MethodTrace:
+		return true
+	}
+	return false
 }
