@@ -1,5 +1,10 @@
 default:
-  image: ubuntu:18.04
+  image: node:latest
+
+cache:
+  paths:
+    - website/node_modules/
+    - monitor/node_modules/
 
 pages:
   rules:
@@ -7,11 +12,15 @@ pages:
   artifacts:
     paths:
       - public
+      - website/node_modules/
+      - monitor/node_modules/
   before_script:
     - "which git || ( apt-get update -y && apt-get install git -y )"
     - git config user.name "uptime"
     - git config user.email "<>"
     - git config push.default "current"
+    - cd website; npm ci --only=prod; cd ..
+    - cd monitor; npm ci --only=prod; cd ..
   script:
     - git remote rm origin || true
     - git remote add origin "https://${GITLAB_USER_NAME}:${CI_ACCESS_TOKEN}@${CI_REPOSITORY_URL#*@}"
@@ -19,4 +28,5 @@ pages:
     - git fetch
     - git branch --set-upstream-to=origin/$CI_COMMIT_BRANCH $CI_COMMIT_BRANCH
     - git pull
-    - ./run
+    - cd website; npm run ci; cd ..
+    - cd monitor; npm run ci:topublic; cd ..
