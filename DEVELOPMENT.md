@@ -2,23 +2,21 @@
 
 ## File Structure
 
-- `docs`: Markdown documentation about this prodject
-- `monitor`: A golang cli applicaton
-- `template`: Location for built files to include in the release
+- `monitor`: A NodeJS cli applicaton
+- `public`: Location for built files to include for the webhost
 - `website`: A [svelte js](https://svelte.dev/) application using [tailwindcss](https://tailwindcss.com/)
   Only the reactive parts of the application are rendered by svelte the loading html is directly written in `index.html`
 
 ## Start Developing
 
-It is expected that you have installed **GoLang** and **NodeJS** on your computer.
+It is expected that you have installed **NodeJS** on your computer.
 
 ### Installation
 
 **1. Monitor**
 
 1. Open a terminal in `./monitor`
-2. Run `go get` to install dependencies
-3. Then run `npm install` to install npm developer dependencies for hot reloads during development
+2. Run `npm install` to install dependencies
 
 **2. Website**
 
@@ -30,8 +28,7 @@ It is expected that you have installed **GoLang** and **NodeJS** on your compute
 **1. Monitor**
 
 1. Open a terminal in `./monitor`
-2. Run `npm run dev` to reload if something changes in `*.go` or in the config.json file.
-   > `npm run start` runs the go program once.
+2. Run `npm run dev` to runs the cli program.
 
 **2. Website**
 
@@ -42,17 +39,10 @@ It is expected that you have installed **GoLang** and **NodeJS** on your compute
 
 1. Open a terminal at the root of this project
 2. Change dir to website `cd website`
-3. Run `npm run build`
+3. Run `npm run ci`
 4. Change dir to monitor `cd ../monitor`
-5. Run `npm run build`
-6. The result is inside `template`
-
-**GitHub Release**
-Zip the result and then add to release documents
-
-```sh
-zip -r template.zip template
-```
+5. Run `npm run ci:topublic`
+6. The result is inside `public`
 
 ## JavaScript Flow
 
