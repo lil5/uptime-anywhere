@@ -6,4 +6,6 @@ if (DISCORD_TOKEN) {
 	test("discord sends message using webhook successfully", () => {
 		runDiscord(DISCORD_TOKEN, "Webhook test🟩")
 	})
+} else {
+	test.skip("discord sends message using webhook successfully", () => {})
 }
