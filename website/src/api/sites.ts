@@ -1,5 +1,5 @@
 import csv, { ParseConfig } from "papaparse"
-import type { CSVLine, RawDataSite, Config, ConfigSite } from "../types"
+import type { CSVLine, RawDataSite, Config, ConfigSite, PromiseSettle } from "../types"
 
 const CSV_OPTIONS: ParseConfig = {
 	newline: "\n",

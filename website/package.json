@@ -1,10 +1,13 @@
 {
+	"name": "website",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "svelte-check && vite build && rm -rf ../template/public && mv build ../template/public && mkdir ../template/public/data && touch ../template/public/data/.gitkeep"
+		"build": "svelte-check && vite build",
+		"ci": "vite build && mv build ../public",
+		"ci:withdata": "npm run ci && cp -r ../monitor/public/data ../public/"
 	},
-	"devDependencies": {
+	"dependencies": {
 		"@sveltejs/vite-plugin-svelte": "^1.0.0-next.15",
 		"@tsconfig/svelte": "^2.0.1",
 		"@types/papaparse": "^5.2.6",
@@ -13,9 +16,7 @@
 		"svelte": "^3.42.1",
 		"svelte-check": "^2.2.4",
 		"svelte-preprocess": "^4.7.4",
-		"vite": "^2.4.4"
-	},
-	"dependencies": {
+		"vite": "^2.4.4",
 		"chart.js": "^3.5.0",
 		"dayjs": "^1.10.6",
 		"papaparse": "^5.3.1",
