@@ -1,0 +1,25 @@
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "2 * * * *"
+
+jobs:
+  monitor:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v2
+      - name: Setup git config
+        shell: bash
+        run: |
+          git config user.name "uptime"
+          git config user.email "<>"
+          git config push.default "current"
+      - name: Install NodeJS 16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+      - name: Install dependencies
+        run: cd monitor; npm ci --only=prod; cd ..
+      - name: Run Build
+        run: cd monitor; npm run ci; cd ..

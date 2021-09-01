@@ -3,21 +3,6 @@ tmp
 
 website/build
 
-monitor/data/*
-monitor/run
+monitor/.env.test
 
-template/public/assets
-template/public/data/*
-!template/public/data/.gitkeep
-!template/public/data/config.json
-
-template/.git
-template/run
-
-template/public/*.png
-template/public/*.svg
-template/public/browserconfig.xml
-template/public/favicon.ico
-template/public/site.webmanifest
-
-template.zip
+public
