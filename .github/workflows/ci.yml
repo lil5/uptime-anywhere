@@ -18,6 +18,10 @@ jobs:
         with:
           node-version: 16.x
       - name: Install dependencies
-        run: cd monitor; npm ci; cd ..
+        run: |
+          cd monitor; npm ci; cd ..
+          cd website; npm ci; cd ..
       - name: Run Test
-        run: cd monitor; npm run test; cd ..
+        run: |
+          cd monitor; npm run test; cd ..
+          cd website; npm run test; cd ..
