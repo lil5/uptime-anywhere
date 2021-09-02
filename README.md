@@ -1,4 +1,5 @@
-![GitHub](https://img.shields.io/github/license/lil5/uptime-anywhere?style=for-the-badge)
+[![GitHub](https://img.shields.io/github/license/lil5/uptime-anywhere)](https://github.com/lil5/uptime-anywhere/blob/main/LICENSE)
+[![.github/workflows/ci.yml](https://github.com/lil5/uptime-anywhere/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/lil5/uptime-anywhere/actions/workflows/ci.yml)
 
 # Uptime Anywhere
 
