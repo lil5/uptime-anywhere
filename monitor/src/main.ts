@@ -31,6 +31,7 @@ async function main() {
 	const { sscList, hasAnyWritten } = await writeAll(httpResults)
 
 	if (!hasAnyWritten) {
+		console.info("nothing new has happened")
 		return
 	}
 

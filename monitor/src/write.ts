@@ -41,7 +41,6 @@ async function write(
 	siteName: string,
 	currentRecord: CSVRecord
 ): Promise<{ hasWritten: boolean; ssc: SiteStatusChange }> {
-	let hasWritten = false
 	const csvData =
 		[
 			currentRecord.status,
@@ -72,11 +71,15 @@ async function write(
 		}
 
 	// append or create file
-	await fsp.appendFile(f, csvData, { encoding: "utf8" })
+	if (ssc.first) {
+		await fsp.writeFile(f, `${csvHeaders}\n${csvData}`, { encoding: "utf8" })
+	} else {
+		await fsp.appendFile(f, csvData, { encoding: "utf8" })
+	}
 
 	await f.close()
 
-	return { hasWritten, ssc }
+	return { hasWritten: true, ssc }
 }
 
 export function getSiteStatusChange(
@@ -97,10 +100,10 @@ export function getSiteStatusChange(
 
 	const currentTime = dayjs(currentRecord.timestamp)
 	const lastTime = dayjs(lastRecord.timestamp)
-	const lastTimePlusN = lastTime.subtract(...LATER_THAN)
+	const lastTimePlusN = lastTime.add(...LATER_THAN)
 
-	const isNotLaterThanN = currentTime > lastTimePlusN
-	return new SiteStatusChange({ laterThanN: !isNotLaterThanN })
+	const isLaterThanN = currentTime > lastTimePlusN
+	return new SiteStatusChange({ laterThanN: isLaterThanN })
 }
 
 export async function getLastCSVRecord(
