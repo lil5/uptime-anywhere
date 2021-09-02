@@ -1,5 +1,4 @@
 import { call } from "./call"
-import { ConfigSite } from "./types"
 import * as https from "https"
 import * as http from "http"
 import * as pem from "pem"
@@ -50,12 +49,6 @@ describe("calling one config site", () => {
 		serverHttp.close()
 		serverHttpsSelfSigned.close()
 	})
-	const sutSites: ConfigSite[] = [
-		{
-			name: "Google",
-			url: "https://www.google.com/",
-		},
-	]
 
 	it("call test http server", async () => {
 		const response = await call({

@@ -1,9 +1,6 @@
 import got, { OptionsOfTextResponseBody, Method } from "got"
 import { ConfigSite, CSVRecord, S_DOWN, S_UP } from "./types"
 
-// //@ts-ignore
-// process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0
-
 export async function callAll(
 	sites: ConfigSite[]
 ): Promise<Record<string, CSVRecord>> {
@@ -37,7 +34,6 @@ export async function call(site: ConfigSite): Promise<CSVRecord> {
 		timeout = site.maxResponseTime
 	}
 
-	const controller = new AbortController()
 	const requestConfig: OptionsOfTextResponseBody = {
 		method: method as Method,
 		timeout,

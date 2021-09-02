@@ -2,7 +2,7 @@ import { getLastCSVRecord, getSiteStatusChange, openFile } from "./write"
 import * as path from "path"
 import faker from "faker"
 import { CSVRecord } from "./types"
-import fs, { promises as fsp } from "fs"
+import { promises as fsp } from "fs"
 
 describe("read last line of file and parse csv data", () => {
 	const nonExistingFilePath = path.join(

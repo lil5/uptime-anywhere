@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
     "strict": true,
+    "strictNullChecks": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+
     "esModuleInterop": true,
   },
 }
