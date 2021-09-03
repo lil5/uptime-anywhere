@@ -12,10 +12,10 @@ function runGitCommand(...args: string[]): Promise<void> {
 	return new Promise<void>((resolve, reject) => {
 		exec(`git ${args.join(" ")}`, (err, stdout, stderr) => {
 			if (err) {
-				reject(err)
+				reject({ err, stdout, stderr })
 			}
 			if (stderr) {
-				reject(stderr)
+				reject({ err, stdout, stderr })
 			}
 
 			resolve()
