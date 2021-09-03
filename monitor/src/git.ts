@@ -3,7 +3,7 @@ import { exec } from "child_process"
 export default async function runGit(message: string): Promise<void> {
 	await runGitCommand("add", "public/data/")
 
-	await runGitCommand("commit", `-m ${message}`)
+	await runGitCommand("commit", `-m '${message}'`)
 
 	await runGitCommand("push", "origin")
 }
