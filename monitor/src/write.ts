@@ -87,7 +87,10 @@ export function getSiteStatusChange(
 	currentRecord: CSVRecord
 ): SiteStatusChange {
 	if (lastRecord === null) {
-		return new SiteStatusChange({ first: true })
+		if (currentRecord.status === "up") {
+			return new SiteStatusChange({ first: true, changedToUp: true })
+		}
+		return new SiteStatusChange({ first: true, changedToDown: true })
 	}
 
 	if (lastRecord.status !== currentRecord.status) {

@@ -6,5 +6,6 @@
     "noUnusedLocals": true,
 
     "esModuleInterop": true,
+    "types": ["node", "jest", "jest-extended"]
   },
 }

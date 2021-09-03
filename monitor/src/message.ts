@@ -42,7 +42,7 @@ export default function buildMessage(
 				changedToDown.push(siteName)
 			} else {
 				let resultSite = resultSites[siteName]
-				if (resultSite?.status === "up") {
+				if (resultSite?.status === "down") {
 					noChangeAndIsDown.push(siteName)
 				}
 			}
@@ -75,8 +75,14 @@ export default function buildMessage(
 
 	if (changedToDownEmpty && createdAndIsDownEmpty && noChangeAndIsDownEmpty) {
 		result = `${e_UP}${emoji} all sites are up`
-		let isAre = grammerIsAre(createdAndIsDown.length)
-		result = `${e_DOWN}${emoji} ${createdAndIsDown.join(", ")} ${isAre} down`
+	} else {
+		const allDown = [
+			...createdAndIsDown,
+			...changedToDown,
+			...noChangeAndIsDown,
+		]
+		let isAre = grammerIsAre(allDown.length)
+		result = `${e_DOWN}${emoji} ${grammerAndComma(allDown)} ${isAre} down`
 	}
 
 	return result
@@ -84,6 +90,19 @@ export default function buildMessage(
 
 function grammerIsAre(n: number): string {
 	return n > 1 ? "are" : "is"
+}
+
+function grammerAndComma(arr: string[]): string {
+	const last = arr[arr.length - 1]
+	// n - 1
+	const commaArr = arr.slice(0, -1)
+
+	let result = last
+
+	if (commaArr.length) {
+		result = `${commaArr.join(", ")} & ${last}`
+	}
+	return result
 }
 
 export function BuildMessageBody(c: Config, mt: MessageType): string {

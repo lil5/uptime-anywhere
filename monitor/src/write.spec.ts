@@ -1,8 +1,8 @@
 import { getLastCSVRecord, getSiteStatusChange, openFile } from "./write"
 import * as path from "path"
 import faker from "faker"
-import { CSVRecord } from "./types"
 import { promises as fsp } from "fs"
+import { entryFactory } from "../test/factories"
 
 describe("read last line of file and parse csv data", () => {
 	const nonExistingFilePath = path.join(
@@ -43,18 +43,6 @@ describe("read last line of file and parse csv data", () => {
 })
 
 describe("from the last entry and the current entry determin what the status change is", () => {
-	function entryFactory(override: Partial<CSVRecord> = {}): CSVRecord {
-		return {
-			status: "up",
-			responseTime: faker.datatype.number({
-				min: 1,
-				max: 4000,
-			}),
-			httpCode: 200,
-			timestamp: new Date().toISOString(),
-			...override,
-		}
-	}
 	it("should state first as true if the last entry is null", () => {
 		const sut = getSiteStatusChange(null, entryFactory())
 
