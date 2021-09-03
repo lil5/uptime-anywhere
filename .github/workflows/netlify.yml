@@ -1,0 +1,24 @@
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  netlify:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v2
+      - name: Install NodeJS 16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+      - name: Install dependencies
+        run: |
+          cd website; npm ci --only=prod; cd ..
+          cd monitor; npm ci --only=prod; cd ..
+      - name: Run Build
+        run: cd website; npm run ci:withdata; cd ..
+      - name: Push to netlify
+        uses: netlify/actions/diff-includes@master
+        with:
+          args: public
