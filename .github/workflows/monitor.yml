@@ -22,4 +22,4 @@ jobs:
       - name: Install dependencies
         run: cd monitor; npm ci --only=prod; cd ..
       - name: Run Build
-        run: cd monitor; npm run ci; cd ..
+        run: cd monitor; npm run ci  --discord='${{ secrets.DISCORD_TOKEN }}'; cd ..
