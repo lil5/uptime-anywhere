@@ -9,7 +9,6 @@
 	},
 	"dependencies": {
 		"@types/node": "^16.7.10",
-		"commander": "^8.1.0",
 		"dayjs": "^1.10.6",
 		"discord.js": "^13.1.0",
 		"got": "^11.8.2",

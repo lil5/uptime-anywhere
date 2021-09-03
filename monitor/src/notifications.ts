@@ -9,6 +9,6 @@ export function runDiscord(webhookUrl: string, message: string) {
 		content: message,
 		username: "uptime-anywhere",
 		avatarURL:
-			"https://raw.githubusercontent.com/lil5/uptime-template/main/public/android-chrome-512x512.png",
+			"https://raw.githubusercontent.com/lil5/uptime-anywhere/main/website/public/android-chrome-512x512.png",
 	})
 }
