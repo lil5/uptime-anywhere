@@ -13,9 +13,7 @@ jobs:
         with:
           node-version: 16.x
       - name: Install dependencies
-        run: |
-          cd website; npm ci --only=prod; cd ..
-          cd monitor; npm ci --only=prod; cd ..
+        run: cd website; npm ci --only=prod; cd ..
       - name: Run Build
         run: cd website; npm run ci:withdata; cd ..
       - name: Push to netlify
