@@ -5,6 +5,7 @@ export default ({mode}) => defineConfig({
 	plugins: [svelte()],
 	base: mode === 'production' ? "./" : '/',
 	build: {
-		outDir: "build"
+		outDir: "../public",
+		emptyOutDir: true,
 	}
 })

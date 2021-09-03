@@ -3,7 +3,6 @@
 	"scripts": {
 		"dev": "export NODE_ENV='dev'; node -r ts-node/register src/main.ts",
 		"ci": "node -r ts-node/register src/main.ts",
-		"ci:topublic": "npm run ci && cp -r public/data ../public/",
 		"test:watch": "jest --watch",
 		"test": "jest"
 	},

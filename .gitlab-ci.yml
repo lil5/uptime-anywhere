@@ -28,5 +28,5 @@ pages:
     - git fetch
     - git branch --set-upstream-to=origin/$CI_COMMIT_BRANCH $CI_COMMIT_BRANCH
     - git pull
-    - cd website; npm run ci; cd ..
-    - cd monitor; npm run ci:topublic; cd ..
+    - cd monitor; npm run ci; cd ..
+    - cd website; npm run ci:withdata; cd ..

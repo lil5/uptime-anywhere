@@ -5,7 +5,7 @@
 		"dev": "vite",
 		"test": "svelte-check",
 		"build": "svelte-check && vite build",
-		"ci": "vite build && mv build ../public",
+		"ci": "vite build",
 		"ci:withdata": "npm run ci && cp -r ../monitor/public/data ../public/"
 	},
 	"dependencies": {
