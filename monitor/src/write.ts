@@ -14,9 +14,11 @@ export async function writeAll(
 	httpResults: Record<string, CSVRecord>
 ): Promise<{
 	hasAnyWritten: boolean
+	hasAnyNotify: boolean
 	sscList: Record<string, SiteStatusChange>
 }> {
 	let hasAnyWritten = false
+	let hasAnyNotify = false
 	let sscList: Record<string, SiteStatusChange> = {}
 
 	for (let siteName in httpResults) {
@@ -27,20 +29,23 @@ export async function writeAll(
 			throw new Error(`result is undefined from ${httpResults[siteName]}`)
 		}
 
-		const { hasWritten, ssc } = await write(siteName, result)
+		const ssc = await write(siteName, result)
 		sscList[siteName] = ssc
-		if (hasWritten) {
+		if (ssc.ShouldWrite()) {
 			hasAnyWritten = true
+		}
+		if (ssc.ShouldNotify()) {
+			hasAnyNotify = true
 		}
 	}
 
-	return { hasAnyWritten, sscList }
+	return { hasAnyWritten, hasAnyNotify, sscList }
 }
 
 async function write(
 	siteName: string,
 	currentRecord: CSVRecord
-): Promise<{ hasWritten: boolean; ssc: SiteStatusChange }> {
+): Promise<SiteStatusChange> {
 	const csvData =
 		[
 			currentRecord.status,
@@ -64,11 +69,7 @@ async function write(
 	const ssc = getSiteStatusChange(lastRecord, currentRecord)
 
 	// if there are no changes skip write and return
-	if (!ssc.ShouldWrite())
-		return {
-			hasWritten: false,
-			ssc,
-		}
+	if (!ssc.ShouldWrite()) return ssc
 
 	// append or create file
 	if (ssc.first) {
@@ -79,7 +80,7 @@ async function write(
 
 	await f.close()
 
-	return { hasWritten: true, ssc }
+	return ssc
 }
 
 export function getSiteStatusChange(

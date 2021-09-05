@@ -19,7 +19,7 @@ async function main() {
 
 	const httpResults = await callAll(config.sites)
 
-	const { sscList, hasAnyWritten } = await writeAll(httpResults)
+	const { sscList, hasAnyWritten, hasAnyNotify } = await writeAll(httpResults)
 
 	if (!hasAnyWritten) {
 		console.info("nothing new has happened")
@@ -34,8 +34,10 @@ async function main() {
 		console.info("git will not run in dev mode")
 	}
 
-	if (DISCORD_TOKEN && DISCORD_TOKEN.length) {
-		runDiscord(DISCORD_TOKEN, message)
+	if (hasAnyNotify) {
+		if (DISCORD_TOKEN && DISCORD_TOKEN.length) {
+			runDiscord(DISCORD_TOKEN, message)
+		}
 	}
 }
 

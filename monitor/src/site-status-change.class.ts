@@ -20,4 +20,8 @@ export default class SiteStatusChange {
 			this.changedToDown || this.changedToUp || this.laterThanN || this.first
 		)
 	}
+
+	ShouldNotify(): boolean {
+		return this.changedToDown || this.changedToUp || this.first
+	}
 }
