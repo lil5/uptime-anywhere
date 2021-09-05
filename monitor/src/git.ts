@@ -14,9 +14,6 @@ function runGitCommand(...args: string[]): Promise<void> {
 			if (err) {
 				reject({ err, stdout, stderr })
 			}
-			if (stderr) {
-				reject({ err, stdout, stderr })
-			}
 
 			resolve()
 		})
